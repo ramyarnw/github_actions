@@ -18,7 +18,7 @@ jobs:
           flutter config --enable-web
           flutter pub get
           flutter build web --release
-        working-directory: ./
+        working-directory: ./web-app
 #        deploy firebase hosting
       - name: Deploy Firebase Hosting
         uses: w9jds/firebase-action@master
