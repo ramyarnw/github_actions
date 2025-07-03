@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+
 jobs:
   hosting:
     runs-on: ubuntu-latest
