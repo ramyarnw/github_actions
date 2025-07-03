@@ -3,7 +3,7 @@ name: Build & Deploy Web
 on:
   push:
     branches:
-      - main  # or whichever branch you want to deploy from
+      - main
 
 jobs:
   hosting:
@@ -11,28 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ✅ Checkout repo
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # ✅ Setup Flutter
-      - uses: subosito/flutter-action@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          channel: 'dev'  # or 'stable'
+          flutter-version: '3.22.0'  # ✅ Use latest stable version
 
-      # ✅ Build Flutter Web
-      - name: Build Web
+      - name: Build Flutter Web
         run: |
           flutter config --enable-web
           flutter pub get
           flutter build web --release
 
-      # ✅ Deploy to Firebase Hosting
-      - name: Deploy Firebase Hosting
+      - name: Deploy to Firebase Hosting
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting:my-website-7ebe3
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
-
-          
