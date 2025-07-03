@@ -17,7 +17,7 @@ jobs:
       - name: Set up Flutter (Dart 3.8.1)
         uses: subosito/flutter-action@v2
         with:
-          channel: master  # Ensures Dart 3.8.1+
+          channel: stable  # Ensures Dart 3.8.1+
 
       - name: Check versions
         run: |
