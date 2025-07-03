@@ -8,6 +8,7 @@ on:
       - "lib/main.dart"
       - "android/app/build.gradle.kts"
       - "pubspec.yaml"
+  workflow_dispatch:
 
 jobs:
   android:
