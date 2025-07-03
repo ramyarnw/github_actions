@@ -26,6 +26,6 @@ jobs:
           args: deploy --only hosting:my-website-7ebe3
         env:
           FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
-          PROJECT_PATH: C:/ramya/projects/fyndo
+          PROJECT_PATH: C:/ramya/projects/github_actions
 
           
