@@ -7,24 +7,23 @@ on:
 
 jobs:
   hosting:
-    name: Deploy web
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Flutter (Dart 3.8+)
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'  # ✅ Includes Dart 3.8.1
 
-      - name: Verify Flutter/Dart version
+      - name: Check Dart and Flutter version
         run: |
           flutter --version
           dart --version
 
-      - name: Build Flutter Web
+      - name: Build Web
         run: |
           flutter config --enable-web
           flutter pub get
