@@ -42,9 +42,9 @@ jobs:
           bundle-id: ${{ secrets.BUNDLE_ID }}
           app-id: ${{ secrets.APP_ID }}
           profile-type: IOS_APP_STORE
-          api-key-path: AuthKey.p8
-          apiKeyId: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
-          issuerId: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+          api-private-key: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
+          api-key-id: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+          issuer-id: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
 
       - name: Install certificates
         uses: apple-actions/import-codesign-certs@v2
