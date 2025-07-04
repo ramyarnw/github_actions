@@ -25,39 +25,29 @@ jobs:
         working-directory: ios
         run: |
             pod install
-#      - name: Save App Store Connect API key to file
-#        run: |
-#            echo "${{ secrets.APPSTORE_CONNECT_API_KEY_BASE64 }}" | base64 --decode > AuthKey.p8
-#      - name: Set up App Store Connect API Key
-#        uses: maierj/app-store-connect-api-key@v1
-#        id: connectapi
+
+#
+#      - name: Install Apple certificate and provisioning profile
+#        uses: apple-actions/download-provisioning-profiles@v1
 #        with:
-#         apiKeyId: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
-#         issuerId: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
-#         privateKey: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
-
-
-      - name: Install Apple certificate and provisioning profile
-        uses: apple-actions/download-provisioning-profiles@v1
-        with:
-          bundle-id: ${{ secrets.BUNDLE_ID }}
-          profile-type: IOS_APP_STORE
-          api-private-key: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
-          api-key-id: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
-          issuer-id: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
-
-      - name: Install certificates
-        uses: apple-actions/import-codesign-certs@v2
-        with:
-          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
-          p12-file-base64: ${{ secrets.DISTRIBUTION_CERT_BASE64 }}
-          p12-password: ${{ secrets.P12_PASSWORD }}
+#          bundle-id: ${{ secrets.BUNDLE_ID }}
+#          profile-type: IOS_APP_STORE
+#          api-private-key: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
+#          api-key-id: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+#          issuer-id: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+#
+#      - name: Install certificates
+#        uses: apple-actions/import-codesign-certs@v2
+#        with:
+#          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+#          p12-file-base64: ${{ secrets.DISTRIBUTION_CERT_BASE64 }}
+#          p12-password: ${{ secrets.P12_PASSWORD }}
     
 
       - name: Build iOS Archive
         run: |
           flutter pub get
-          flutter build ios --release 
+          flutter build ios --release --no-codesign 
 
       - name: Upload iOS Archive
         uses: actions/upload-artifact@v4
