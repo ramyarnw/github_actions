@@ -37,5 +37,6 @@ jobs:
         with:
          appId: ${{ secrets.FIREBASE_APP_ID }}
          token: ${{ secrets.FIREBASE_AUTH_TOKEN }}
-         groups: ramya.r@nativewit.in  # or comma-separated email addresses
+         testers: ramya.r@nativewit.in  # or comma-separated email addresses
          file: build/app/outputs/flutter-apk/app-release.apk
+         releaseNotes: "New update from GitHub Actions!"
