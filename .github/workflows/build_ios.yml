@@ -25,7 +25,9 @@ jobs:
         run: |
           brew install cocoapods
           cd ios
-          test -f Podfile || flutter build ios --no-codesign
+          if [ ! -f Podfile ]; then
+          flutter build ios --no-codesign
+          fi
           pod install
 
       - name: Build iOS Archive
@@ -37,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/iphoneos
+          path: build/ios/ipa/github_actions.ipa
