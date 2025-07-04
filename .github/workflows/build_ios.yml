@@ -1,4 +1,71 @@
-name: Build Flutter iOS App
+#name: Build Flutter iOS App
+#
+#on:
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - "ios/Runner/AppDelegate.swift"
+#      - "lib/main.dart"
+#      - "pubspec.yaml"
+#
+#jobs:
+#  build-ios:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - uses: subosito/flutter-action@v2
+#        with:
+#          channel: stable
+#
+#      - name: Install CocoaPods
+#        working-directory: ios
+#        run: |
+#            pod install
+#
+##
+##      - name: Install Apple certificate and provisioning profile
+##        uses: apple-actions/download-provisioning-profiles@v1
+##        with:
+##          bundle-id: ${{ secrets.BUNDLE_ID }}
+##          profile-type: IOS_APP_STORE
+##          api-private-key: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
+##          api-key-id: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+##          issuer-id: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+##
+##      - name: Install certificates
+##        uses: apple-actions/import-codesign-certs@v2
+##        with:
+##          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+##          p12-file-base64: ${{ secrets.DISTRIBUTION_CERT_BASE64 }}
+##          p12-password: ${{ secrets.P12_PASSWORD }}
+#
+#
+#      - name: Build iOS Archive
+#        run: |
+#          flutter pub get
+#          flutter build ios --release --no-codesign
+#
+#      - name: Upload iOS Archive
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: ios-build
+#          path: build/ios/iphoneos
+#
+#      - name: Upload IPA to Firebase App Distribution
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#            appId: ${{ secrets.APP_ID }}
+#            token: ${{ secrets.FIREBASE_AUTH_TOKEN }}
+#            groups: ramya.r@nativewit.in
+#            file: build/ios/ipa/github_actions.ipa
+
+
+
+name: Build and Upload Flutter iOS App to TestFlight
 
 on:
   workflow_dispatch:
@@ -6,8 +73,8 @@ on:
     branches:
       - main
     paths:
-      - "ios/Runner/AppDelegate.swift"
       - "lib/main.dart"
+      - "ios/Runner/AppDelegate.swift"
       - "pubspec.yaml"
 
 jobs:
@@ -15,50 +82,28 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - uses: subosito/flutter-action@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
 
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
       - name: Install CocoaPods
         working-directory: ios
-        run: |
-            pod install
+        run: pod install
 
-#
-#      - name: Install Apple certificate and provisioning profile
-#        uses: apple-actions/download-provisioning-profiles@v1
-#        with:
-#          bundle-id: ${{ secrets.BUNDLE_ID }}
-#          profile-type: IOS_APP_STORE
-#          api-private-key: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
-#          api-key-id: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
-#          issuer-id: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
-#
-#      - name: Install certificates
-#        uses: apple-actions/import-codesign-certs@v2
-#        with:
-#          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
-#          p12-file-base64: ${{ secrets.DISTRIBUTION_CERT_BASE64 }}
-#          p12-password: ${{ secrets.P12_PASSWORD }}
-    
+      - name: Build iOS App Archive
+        run: flutter build ipa --release
 
-      - name: Build iOS Archive
-        run: |
-          flutter pub get
-          flutter build ios --release --no-codesign 
-
-      - name: Upload iOS Archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-build
-          path: build/ios/iphoneos
-
-      - name: Upload IPA to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-            appId: ${{ secrets.APP_ID }}
-            token: ${{ secrets.FIREBASE_AUTH_TOKEN }}
-            groups: ramya.r@nativewit.in
-            file: build/ios/ipa/github_actions.ipa
+      - name: Upload to TestFlight using Fastlane
+        working-directory: ios
+        run: fastlane beta
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
