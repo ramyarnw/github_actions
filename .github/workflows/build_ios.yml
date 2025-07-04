@@ -21,21 +21,20 @@ jobs:
         with:
           channel: stable
 
-      - name: Get Flutter Dependencies
-        run: flutter pub get
-
-      - name: Generate iOS Podfile if needed
-        run: flutter build ios --release --no-codesign
-
       - name: Install CocoaPods
         working-directory: ios
-        run: pod install
+        run: |
+            pod install
 
-      - name: Build iOS IPA (no code signing)
-        run: flutter build ipa --no-codesign
+    
 
-      - name: Upload IPA Artifact
+      - name: Build iOS Archive
+        run: |
+          flutter pub get
+          flutter build ios --release 
+
+      - name: Upload iOS Archive
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/ipa/*.ipa
+          path: build/ios/ipa/github_actions.ipa
