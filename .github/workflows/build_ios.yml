@@ -25,7 +25,28 @@ jobs:
         working-directory: ios
         run: |
             pod install
+      - name: Set up App Store Connect API Key
+        uses: apple-actions/app-store-connect-api-key@v1
+        id: connectapi
+        with:
+         apiKeyId: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+         issuerId: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+         privateKey: ${{ secrets.APPSTORE_CONNECT_API_PRIVATE_KEY }}
 
+      - name: Install Apple certificate and provisioning profile
+        uses: apple-actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: ${{ secrets.BUNDLE_ID }}
+          app-id: ${{ secrets.APP_ID }}
+          profile-type: IOS_APP_STORE
+          api-key-path: ${{ steps.connectapi.outputs.apiKeyPath }}
+
+      - name: Install certificates
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+          p12-file-base64: ${{ secrets.DISTRIBUTION_CERT_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
     
 
       - name: Build iOS Archive
