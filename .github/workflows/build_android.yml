@@ -31,3 +31,10 @@ jobs:
         with:
           name: android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Upload to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+         appId: ${{ secrets.FIREBASE_APP_ID }}
+         token: ${{ secrets.FIREBASE_AUTH_TOKEN }}
+         groups: ramya.r@nativewit.in  # or comma-separated email addresses
+         file: build/app/outputs/flutter-apk/app-release.apk
