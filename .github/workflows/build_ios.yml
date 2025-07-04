@@ -24,14 +24,14 @@ jobs:
       - name: Install CocoaPods
         run: |
           brew install cocoapods --formula
-
-          if [ ! -f ios/Podfile ]; then
-          echo "No Podfile found. Running initial Flutter iOS build..."
-          flutter build ios --release --no-codesign
+          cd ios
+          if [ ! -f Podfile ]; then
+            echo "No Podfile found. Generating one..."
+            cd ..
+            flutter build ios --release --no-codesign
+            cd ios
           fi
-
-         cd ios
-         pod install
+          pod install
 
       - name: Get Flutter Dependencies
         run: flutter pub get
