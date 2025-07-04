@@ -24,7 +24,9 @@ jobs:
       - name: Install CocoaPods
         run: |
           brew install cocoapods
-          pod install --project-directory=ios
+          cd ios
+          test -f Podfile || flutter build ios --no-codesign
+          pod install
 
       - name: Build iOS Archive
         run: |
