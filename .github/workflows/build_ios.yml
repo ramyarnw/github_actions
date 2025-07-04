@@ -53,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/ipa/github_actions.ipa
+          path: build/ios/iphoneos
