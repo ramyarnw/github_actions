@@ -25,9 +25,9 @@ jobs:
         working-directory: ios
         run: |
             pod install
-      - name: Save App Store Connect API key to file
-        run: |
-            echo "${{ secrets.APPSTORE_CONNECT_API_KEY_BASE64 }}" | base64 --decode > AuthKey.p8
+#      - name: Save App Store Connect API key to file
+#        run: |
+#            echo "${{ secrets.APPSTORE_CONNECT_API_KEY_BASE64 }}" | base64 --decode > AuthKey.p8
 #      - name: Set up App Store Connect API Key
 #        uses: maierj/app-store-connect-api-key@v1
 #        id: connectapi
