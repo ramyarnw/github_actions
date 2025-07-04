@@ -22,19 +22,11 @@ jobs:
           channel: stable
 
       - name: Install CocoaPods
+        working-directory: ios
         run: |
-          brew install cocoapods --formula
-          cd ios
-          if [ ! -f Podfile ]; then
-            echo "No Podfile found. Generating one..."
-            cd ..
-            flutter build ios --release --no-codesign
-            cd ios
-          fi
-          pod install
+            pod install
 
-      - name: Get Flutter Dependencies
-        run: flutter pub get
+    
 
       - name: Build iOS Archive
         run: |
